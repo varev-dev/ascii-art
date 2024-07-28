@@ -9,20 +9,15 @@ int main() {
         return -1;
     }
 
-    // Accessing and modifying pixel values
     for (int y = 0; y < image.rows; y++) {
         for (int x = 0; x < image.cols; x++) {
-            // Get the pixel
             auto &pixel = image.at<cv::Vec3b>(y, x);
-
-            // Modify the pixel (e.g., invert the color)
             pixel[0] = 255 - pixel[0]; // Blue
             pixel[1] = 255 - pixel[1]; // Green
             pixel[2] = 255 - pixel[2]; // Red
         }
     }
 
-    // Save the modified image
     cv::imwrite("output.jpg", image);
 
     return 0;
