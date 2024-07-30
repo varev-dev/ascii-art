@@ -6,11 +6,8 @@
 #define IMAGE_H
 
 #include <opencv4/opencv2/opencv.hpp>
-#include <filesystem>
 
-#include "Dimensions.h"
-
-namespace fs = std::filesystem;
+#include "Chunk.h"
 
 enum Type {
     DARK_MODE,
@@ -19,17 +16,15 @@ enum Type {
 
 class Processor {
 protected:
-    cv::Mat image;
     Type mode;
-    Dimensions chunk_size;
 
 public:
     Processor();
-    Processor(fs::path path, Type mode);
-    void setImage(fs::path image_path);
-    void process(Type mode = LIGHT_MODE);
-    void print();
-    void save();
+    explicit Processor(Type mode);
+    ~Processor();
+
+    // Utils
+    Chunk processChunk(cv::Mat image, uint16_t x, uint16_t y);
 };
 
 #endif //IMAGE_H
