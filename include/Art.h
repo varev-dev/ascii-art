@@ -12,13 +12,17 @@
 #include "Chunk.h"
 
 class Art {
+private:
+    std::filesystem::path source;
+
 protected:
     cv::Mat image;
-    Chunk chunks[][];
-    Dimensions size;
+    Chunk** chunks;
+    Dimensions dimensions;
 
 public:
     Art();
+    Art(uint32_t width, uint32_t height);
     Art(std::filesystem::path path, uint16_t width, uint16_t height);
     ~Art();
 
@@ -30,12 +34,11 @@ public:
     // Setters
     void setImage(std::filesystem::path path);
     void setSize(uint16_t width, uint16_t height);
-    void setChunk(Chunk data, uint16_t x, uint16_t y);
+    void setChunk(const Chunk& data, uint16_t x, uint16_t y);
 
     // Getters
     std::filesystem::path getImage();
     Dimensions getSize();
-
 };
 
 #endif //ART_H

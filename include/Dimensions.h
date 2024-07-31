@@ -7,9 +7,10 @@
 
 #include <cstdint>
 
-typedef struct {
+typedef struct dims {
     uint32_t width;
     uint32_t height;
+    static dims set(uint32_t width, uint32_t height);
 } Dimensions;
 
 #endif //DIMENSIONS_H
