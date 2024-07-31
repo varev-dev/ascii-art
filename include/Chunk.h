@@ -6,20 +6,30 @@
 #define CHUNK_H
 
 #include <cinttypes>
+#include <ostream>
 
 #include "Dimensions.h"
+
+#define CHUNK_DEFAULT_FILL ' '
 
 class Chunk {
 protected:
     char fill;
-    Dimensions size;
+    Dimensions dimensions;
 
 public:
-    Chunk(uint32_t width, uint32_t heigth);
-    void calculateSize(uint32_t image_width, uint32_t image_heigth, uint32_t collumns, uint32_t rows);
+    Chunk(uint32_t width, uint32_t height);
+    ~Chunk();
 
+    // Setters
+    void setFill(char fill);
+
+    // Getters
+    [[nodiscard]] char getFill() const;
     [[nodiscard]] uint32_t getWidth() const;
     [[nodiscard]] uint32_t getHeight() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Chunk& chunk);
 };
 
 #endif //CHUNK_H
