@@ -3,6 +3,7 @@
 //
 
 #include "../include/Art.h"
+#include <fstream>
 
 Art::Art() : source(""), dimensions(Dimensions().set(0,0)) {
     this->chunks = new Chunk *[1];
@@ -29,10 +30,42 @@ void Art::printArt() {
     }
 }
 
-void Art::saveArt(std::filesystem::path path) {
+void Art::saveArt(const std::filesystem::path& path) {
+    std::ofstream save;
+
+    if (std::filesystem::exists(path)) {
+        std::cout << "Name conflict, file with specified name exists." << std::endl;
+        return;
+    }
+
+    save.open(path);
+
+    if (!save.is_open()) {
+        std::cout << "Unable to open file " << path.filename() << std::endl;
+        return;
+    }
+
+    for (uint32_t y = 0; y < dimensions.height; y++) {
+        for (uint32_t x = 0; x < dimensions.width; x++) {
+            save << chunks[y][x];
+        }
+        save << std::endl;
+    }
+
+    save.close();
 }
 
-void Art::setImage(std::filesystem::path path) {
+void Art::setImage(const std::filesystem::path& path) {
+    const cv::Mat copy = this->image;
+    this->image = cv::imread(path);
+
+    if (this->image.empty()) {
+        std::cout << "No image found in location: " << path.c_str() << std::endl;
+        this->image = copy;
+        return;
+    }
+
+    this->source = path;
 }
 
 void Art::setSize(const uint16_t width, const uint16_t height) {
@@ -44,9 +77,10 @@ void Art::setChunk(const Chunk& data, const uint16_t x, const uint16_t y) {
     this->chunks[y][x] = data;
 }
 
-std::filesystem::path Art::getImage() {
+std::filesystem::path Art::getImage() const {
+    return this->source;
 }
 
-Dimensions Art::getSize() {
+Dimensions Art::getSize() const {
     return dimensions;
 }
